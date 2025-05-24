@@ -10,12 +10,12 @@ public class Tour {
     private MealType mealType;
     private int days;
     private double price;
-    private String hotelName;
+    private Hotel hotel;
     private TourLanguage language;
     private String description;
 
     public Tour(int id, String title, TourType tourType, TransportType transport, MealType mealType,
-                int days, double price, String hotelName, TourLanguage language, String description) {
+                int days, double price, Hotel hotel, TourLanguage language, String description) {
         this.id = id;
         this.title = title;
         this.tourType = tourType;
@@ -23,7 +23,7 @@ public class Tour {
         this.mealType = mealType;
         this.days = days;
         this.price = price;
-        this.hotelName = hotelName;
+        this.hotel = hotel;
         this.language = language;
         this.description = description;
     }
@@ -50,8 +50,8 @@ public class Tour {
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
-    public String getHotelName() { return hotelName; }
-    public void setHotelName(String hotelName) { this.hotelName = hotelName; }
+    public Hotel getHotel() { return hotel; }
+    public void setHotel(Hotel hotel) { this.hotel = hotel; }
 
     public TourLanguage getLanguage() { return language; }
     public void setLanguage(TourLanguage language) { this.language = language; }
@@ -67,7 +67,8 @@ public class Tour {
     public boolean matchesSearch(String query) {
         String lower = query.toLowerCase();
         return title.toLowerCase().contains(lower)
-                || hotelName.toLowerCase().contains(lower)
+                || hotel.getName().toLowerCase().contains(lower)
                 || description.toLowerCase().contains(lower);
     }
+
 }

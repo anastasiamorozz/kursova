@@ -12,6 +12,12 @@ public class TourDAO {
     public TourDAO() {
         this.tours = new ArrayList<>();
 
+        // Створення об'єктів Hotel
+        Hotel sunnyParadise = new Hotel("Hotel Sunny Paradise", 5);
+        Hotel bellaRoma = new Hotel("Hotel Bella Roma", 4);
+        Hotel thermalSpa = new Hotel("Thermal Spa Resort", 5);
+
+        // Додавання турів
         tours.add(new Tour(
                 1,
                 "Сонячна Болгарія",
@@ -20,7 +26,7 @@ public class TourDAO {
                 MealType.ALL_INCLUSIVE,
                 7,
                 12000,
-                "Hotel Sunny Paradise",
+                sunnyParadise,
                 TourLanguage.UKRAINIAN,
                 "Незабутній відпочинок на узбережжі Чорного моря."
         ));
@@ -33,7 +39,7 @@ public class TourDAO {
                 MealType.BREAKFAST,
                 5,
                 14500,
-                "Hotel Bella Roma",
+                bellaRoma,
                 TourLanguage.ENGLISH,
                 "Поринь у атмосферу стародавнього міста!"
         ));
@@ -46,7 +52,7 @@ public class TourDAO {
                 MealType.BREAKFAST,
                 10,
                 18000,
-                "Thermal Spa Resort",
+                thermalSpa,
                 TourLanguage.GERMAN,
                 "Лікування та релакс у Чехії"
         ));

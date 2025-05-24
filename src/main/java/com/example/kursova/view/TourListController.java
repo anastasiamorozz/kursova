@@ -1,38 +1,36 @@
 package com.example.kursova.view;
 
-import com.example.kursova.dao.TourDAO;
 import com.example.kursova.model.Tour;
-import javafx.collections.*;
+import com.example.kursova.dao.TourDAO;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class TourListController {
-    @FXML private TableView<?> tourTable;
-    @FXML private TableColumn<?, ?> titleColumn;
 
+    @FXML
+    private TableView<Tour> tourTable;
 
-//    @FXML
-//    private TableView<Tour> tourTable;
-//    @FXML
-//    private TableColumn<Tour, String> titleColumn;
-//    @FXML
-//    private TableColumn<Tour, String> typeColumn;
-//    @FXML
-//    private TableColumn<Tour, Integer> daysColumn;
-//    @FXML
-//    private TableColumn<Tour, Double> priceColumn;
-//
-//    private final TourDAO tourDAO = new TourDAO();
-//    private final ObservableList<Tour> tourData = FXCollections.observableArrayList();
-//
-//    @FXML
-//    private void initialize() {
-//        titleColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTitle()));
-//        typeColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTourType().name()));
-//        daysColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getDays()).asObject());
-//        priceColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getPrice()).asObject());
-//
-//        tourData.addAll(tourDAO.getAllTours());
-//        tourTable.setItems(tourData);
-//    }
+    @FXML
+    private TableColumn<Tour, String> titleColumn;
+
+    @FXML
+    private TableColumn<Tour, String> hotelColumn;
+
+    private final TourDAO tourDAO = new TourDAO();
+
+    @FXML
+    private void initialize() {
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        tourTable.setItems(FXCollections.observableArrayList(tourDAO.getAllTours()));
+
+        hotelColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getHotel().toString()));
+
+        System.out.println("Контролер ініціалізовано успішно!");
+    }
 }
