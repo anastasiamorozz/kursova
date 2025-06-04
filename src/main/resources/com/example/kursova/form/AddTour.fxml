@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+
+
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.kursova.controller.AddTourController" spacing="10" style="-fx-padding: 20;">
+    <TextField fx:id="titleField" promptText="Назва туру"/>
+    <ComboBox fx:id="tourTypeCombo" promptText="Тип туру"/>
+    <ComboBox fx:id="transportCombo" promptText="Транспорт"/>
+    <ComboBox fx:id="mealTypeCombo" promptText="Тип харчування"/>
+    <TextField fx:id="daysField" promptText="Кількість днів"/>
+    <TextField fx:id="priceField" promptText="Ціна"/>
+    <ComboBox fx:id="hotelCombo" promptText="Готель"/>
+    <ComboBox fx:id="guideCombo" promptText="Гід"/>
+    <Button text="Додати тур" onAction="#addTour"/>
+</VBox>

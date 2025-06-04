@@ -1,12 +1,18 @@
-package com.example.kursova.view;
+package com.example.kursova.controller;
 
 import com.example.kursova.dao.TourDAO;
 import com.example.kursova.model.Tour;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class TourListController {
 
@@ -39,6 +45,35 @@ public class TourListController {
 
     @FXML
     private TableColumn<Tour, String> guideColumn;
+
+    @FXML
+    private void handleAddTour() {
+        openWindow("/com/example/kursova/form/AddTour.fxml", "Додати тур");
+    }
+
+    @FXML
+    private void handleAddGuide() {
+        openWindow("/com/example/kursova/form/AddGuide.fxml", "Додати гіда");
+    }
+
+    @FXML
+    private void handleAddHotel() {
+        openWindow("/com/example/kursova/form/AddHotel.fxml", "Додати готель");
+    }
+
+    private void openWindow(String fxmlPath, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("❌ Помилка відкриття вікна: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void initialize() {

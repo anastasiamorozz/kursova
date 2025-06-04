@@ -3,9 +3,20 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.kursova.view.TourListController">
+            fx:controller="com.example.kursova.controller.TourListController">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Button text="➕ Додати тур" onAction="#handleAddTour"/>
+            <Button text="👨‍💼 Додати гіда" onAction="#handleAddGuide"/>
+            <Button text="🏨 Додати готель" onAction="#handleAddHotel"/>
+        </HBox>
+    </top>
+
     <center>
         <TableView fx:id="tourTable">
             <columns>
@@ -19,8 +30,8 @@
                 <TableColumn fx:id="languageColumn" text="Мова"/>
                 <TableColumn fx:id="guideColumn" text="Гід"/>
             </columns>
-
         </TableView>
     </center>
 </BorderPane>
+
 
