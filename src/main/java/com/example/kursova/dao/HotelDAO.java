@@ -1,0 +1,64 @@
+package com.example.kursova.dao;
+
+import com.example.kursova.model.Hotel;
+import com.example.kursova.utils.DBUtil;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HotelDAO {
+
+    public void addHotel(Hotel hotel) {
+        String sql = "INSERT OR IGNORE INTO hotels (name, stars) VALUES (?, ?)";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, hotel.getName());
+            stmt.setInt(2, hotel.getStars());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка додавання готелю: " + e.getMessage());
+        }
+    }
+
+    public List<Hotel> getAllHotels() {
+        List<Hotel> hotels = new ArrayList<>();
+        String sql = "SELECT * FROM hotels";
+
+        try (Connection conn = DBUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                hotels.add(new Hotel(
+                        rs.getString("name"),
+                        rs.getInt("stars")
+                ));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка отримання готелів: " + e.getMessage());
+        }
+
+        return hotels;
+    }
+
+    public Hotel getHotelByName(String name) {
+        String sql = "SELECT * FROM hotels WHERE name = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Hotel(
+                        rs.getString("name"),
+                        rs.getInt("stars")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка пошуку готелю: " + e.getMessage());
+        }
+        return null;
+    }
+}

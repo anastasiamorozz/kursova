@@ -11,7 +11,16 @@
             <columns>
                 <TableColumn fx:id="titleColumn" text="Назва"/>
                 <TableColumn fx:id="hotelColumn" text="Готель"/>
+                <TableColumn fx:id="tourTypeColumn" text="Тип туру"/>
+                <TableColumn fx:id="transportColumn" text="Транспорт"/>
+                <TableColumn fx:id="mealTypeColumn" text="Тип харчування"/>
+                <TableColumn fx:id="daysColumn" text="Дні"/>
+                <TableColumn fx:id="priceColumn" text="Ціна"/>
+                <TableColumn fx:id="languageColumn" text="Мова"/>
+                <TableColumn fx:id="guideColumn" text="Гід"/>
             </columns>
+
         </TableView>
     </center>
 </BorderPane>
+

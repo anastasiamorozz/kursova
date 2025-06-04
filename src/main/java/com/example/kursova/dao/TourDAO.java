@@ -2,98 +2,80 @@ package com.example.kursova.dao;
 
 import com.example.kursova.enums.*;
 import com.example.kursova.model.*;
+import com.example.kursova.utils.DBUtil;
 
+import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TourDAO {
-    private final List<Tour> tours;
-
-    public TourDAO() {
-        this.tours = new ArrayList<>();
-
-        // Створення об'єктів Hotel
-        Hotel sunnyParadise = new Hotel("Hotel Sunny Paradise", 5);
-        Hotel bellaRoma = new Hotel("Hotel Bella Roma", 4);
-        Hotel thermalSpa = new Hotel("Thermal Spa Resort", 5);
-
-        // Додавання турів
-        tours.add(new Tour(
-                1,
-                "Сонячна Болгарія",
-                TourType.VACATION,
-                TransportType.PLANE,
-                MealType.ALL_INCLUSIVE,
-                7,
-                12000,
-                sunnyParadise,
-                TourLanguage.UKRAINIAN,
-                "Незабутній відпочинок на узбережжі Чорного моря."
-        ));
-
-        tours.add(new Tour(
-                2,
-                "Екскурсія до Риму",
-                TourType.EXCURSION,
-                TransportType.PLANE,
-                MealType.BREAKFAST,
-                5,
-                14500,
-                bellaRoma,
-                TourLanguage.ENGLISH,
-                "Поринь у атмосферу стародавнього міста!"
-        ));
-
-        tours.add(new Tour(
-                3,
-                "Медичний тур до Карлових Вар",
-                TourType.MEDICAL,
-                TransportType.BUS,
-                MealType.BREAKFAST,
-                10,
-                18000,
-                thermalSpa,
-                TourLanguage.GERMAN,
-                "Лікування та релакс у Чехії"
-        ));
-    }
-
-    public List<Tour> getAllTours() {
-        return new ArrayList<>(tours);
-    }
+    private final GuideDAO guideDAO = new GuideDAO();
+    private final HotelDAO hotelDAO = new HotelDAO();
 
     public void addTour(Tour tour) {
-        tours.add(tour);
-    }
+        // Обов'язково зберегти готель і гіда перед додаванням туру
+        hotelDAO.addHotel(tour.getHotel());
+        guideDAO.addGuide(tour.getGuide());
 
-    public void deleteTour(int id) {
-        tours.removeIf(t -> t.getId() == id);
-    }
+        String sql = """
+            INSERT INTO tours (
+                title, tour_type, transport, meal_type, days, price,
+                hotel_name, language, description, guide_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
-    public void updateTour(Tour updatedTour) {
-        for (int i = 0; i < tours.size(); i++) {
-            if (tours.get(i).getId() == updatedTour.getId()) {
-                tours.set(i, updatedTour);
-                return;
-            }
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, tour.getTitle());
+            stmt.setString(2, tour.getTourType().name());
+            stmt.setString(3, tour.getTransport().name());
+            stmt.setString(4, tour.getMealType().name());
+            stmt.setInt(5, tour.getDays());
+            stmt.setDouble(6, tour.getPrice());
+            stmt.setString(7, tour.getHotel().getName());
+            stmt.setString(8, tour.getLanguage().name());
+            stmt.setString(9, tour.getDescription());
+            stmt.setInt(10, tour.getGuide().getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка додавання туру: " + e.getMessage());
         }
     }
 
-    public List<Tour> searchTours(String query) {
-        return tours.stream()
-                .filter(tour -> tour.matchesSearch(query))
-                .collect(Collectors.toList());
-    }
+    public List<Tour> getAllTours() {
+        List<Tour> tours = new ArrayList<>();
+        String sql = "SELECT * FROM tours";
 
-    public List<Tour> getFilteredTours(TourFilter filter) {
-        return tours.stream()
-                .filter(filter::matches)
-                .collect(Collectors.toList());
-    }
+        try (Connection conn = DBUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-    public Optional<Tour> getTourById(int id) {
-        return tours.stream()
-                .filter(t -> t.getId() == id)
-                .findFirst();
+            while (rs.next()) {
+                Hotel hotel = hotelDAO.getHotelByName(rs.getString("hotel_name"));
+                Guide guide = guideDAO.getGuideById(rs.getInt("guide_id"));
+
+                Tour tour = new Tour(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        TourType.valueOf(rs.getString("tour_type")),
+                        TransportType.valueOf(rs.getString("transport")),
+                        MealType.valueOf(rs.getString("meal_type")),
+                        rs.getInt("days"),
+                        rs.getDouble("price"),
+                        hotel,
+                        TourLanguage.valueOf(rs.getString("language")),
+                        rs.getString("description"),
+                        guide
+                );
+
+                tours.add(tour);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка отримання турів: " + e.getMessage());
+        }
+
+        return tours;
     }
 }

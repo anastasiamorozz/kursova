@@ -1,5 +1,6 @@
 package com.example.kursova;
 
+import com.example.kursova.utils.DBInitializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,11 +11,15 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        DBInitializer.init();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/kursova/tour_list.fxml"));
         Scene scene = new Scene(loader.load());
         stage.setTitle("Список туристичних турів");
         stage.setScene(scene);
         stage.show();
+
+
+
 
 //        System.out.println(getClass().getResource("/com/example/kursova/tour_list.fxml"));
 

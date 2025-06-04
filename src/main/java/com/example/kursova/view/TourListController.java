@@ -1,9 +1,8 @@
 package com.example.kursova.view;
 
-import com.example.kursova.model.Tour;
 import com.example.kursova.dao.TourDAO;
+import com.example.kursova.model.Tour;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,17 +19,43 @@ public class TourListController {
     @FXML
     private TableColumn<Tour, String> hotelColumn;
 
-    private final TourDAO tourDAO = new TourDAO();
+    @FXML
+    private TableColumn<Tour, String> tourTypeColumn;
+
+    @FXML
+    private TableColumn<Tour, String> transportColumn;
+
+    @FXML
+    private TableColumn<Tour, String> mealTypeColumn;
+
+    @FXML
+    private TableColumn<Tour, Integer> daysColumn;
+
+    @FXML
+    private TableColumn<Tour, Double> priceColumn;
+
+    @FXML
+    private TableColumn<Tour, String> languageColumn;
+
+    @FXML
+    private TableColumn<Tour, String> guideColumn;
 
     @FXML
     private void initialize() {
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        tourTable.setItems(FXCollections.observableArrayList(tourDAO.getAllTours()));
-
-        hotelColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getHotel().toString()));
-
         System.out.println("Контролер ініціалізовано успішно!");
+
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        hotelColumn.setCellValueFactory(new PropertyValueFactory<>("hotel"));
+        tourTypeColumn.setCellValueFactory(new PropertyValueFactory<>("tourType"));
+        transportColumn.setCellValueFactory(new PropertyValueFactory<>("transport"));
+        mealTypeColumn.setCellValueFactory(new PropertyValueFactory<>("mealType"));
+        daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
+        guideColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getGuide().toString()));
+
+
+        tourTable.getItems().addAll(new TourDAO().getAllTours());
     }
 }

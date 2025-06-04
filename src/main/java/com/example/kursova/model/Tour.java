@@ -13,9 +13,10 @@ public class Tour {
     private Hotel hotel;
     private TourLanguage language;
     private String description;
+    private Guide guide;
 
     public Tour(int id, String title, TourType tourType, TransportType transport, MealType mealType,
-                int days, double price, Hotel hotel, TourLanguage language, String description) {
+                int days, double price, Hotel hotel, TourLanguage language, String description, Guide guide) {
         this.id = id;
         this.title = title;
         this.tourType = tourType;
@@ -26,6 +27,7 @@ public class Tour {
         this.hotel = hotel;
         this.language = language;
         this.description = description;
+        this.guide = guide;
     }
 
     // Геттери та сеттери
@@ -59,10 +61,14 @@ public class Tour {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
+    public Guide getGuide() { return guide; }
+    public void setGuide(Guide guide) { this.guide = guide; }
+
     @Override
     public String toString() {
-        return title + " (" + tourType + ", " + days + " днів, " + price + "₴)";
+        return title + " (" + tourType + ", " + days + " днів, " + price + "₴, гід: " + guide + ")";
     }
+
 
     public boolean matchesSearch(String query) {
         String lower = query.toLowerCase();
