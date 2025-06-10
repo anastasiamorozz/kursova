@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.kursova.controller.TourListController">
 
     <top>
-        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
-            <Button text="➕ Додати тур" onAction="#handleAddTour"/>
-            <Button text="👨‍💼 Додати гіда" onAction="#handleAddGuide"/>
-<!--            <Button text="🏨 Додати готель" onAction="#handleAddHotel"/>-->
-            <Button text="📝 Список готелів" onAction="#handleShowHotelList"/>
-        </HBox>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <!-- Кнопки -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="➕ Додати тур" onAction="#handleAddTour"/>
+                <Button text="👨‍💼 Додати гіда" onAction="#handleAddGuide"/>
+                <Button text="📝 Список готелів" onAction="#handleShowHotelList"/>
+            </HBox>
+
+            <!-- Панель фільтрації -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Тип туру:"/>
+                <ComboBox fx:id="tourTypeFilter"/>
+
+                <Label text="Транспорт:"/>
+                <ComboBox fx:id="transportTypeFilter"/>
+
+                <Label text="Мова:"/>
+                <ComboBox fx:id="languageFilter"/>
+
+                <Label text="Ціна від:"/>
+                <TextField fx:id="minPriceFilter" prefWidth="60"/>
+                <Label text="до:"/>
+                <TextField fx:id="maxPriceFilter" prefWidth="60"/>
+
+                <Button text="🔍 Фільтрувати" onAction="#applyFilters"/>
+            </HBox>
+        </VBox>
     </top>
 
     <center>
@@ -34,5 +52,3 @@
         </TableView>
     </center>
 </BorderPane>
-
-

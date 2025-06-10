@@ -6,6 +6,7 @@ import com.example.kursova.utils.DBUtil;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TourDAO {
     private final GuideDAO guideDAO = new GuideDAO();
@@ -105,6 +106,13 @@ public class TourDAO {
             e.printStackTrace();
             throw new RuntimeException("Не вдалося оновити тур: " + e.getMessage());
         }
+    }
+
+    public List<Tour> getFilteredTours(TourFilter filter) {
+        List<Tour> allTours = getAllTours(); // Уже існуючий метод, який читає всі тури з бази
+        return allTours.stream()
+                .filter(filter::matches)
+                .collect(Collectors.toList());
     }
 
 }

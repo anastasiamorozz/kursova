@@ -1,17 +1,23 @@
 package com.example.kursova.controller;
 
 import com.example.kursova.dao.TourDAO;
+import com.example.kursova.enums.TourLanguage;
+import com.example.kursova.enums.TourType;
+import com.example.kursova.enums.TransportType;
 import com.example.kursova.model.Guide;
 import com.example.kursova.model.Hotel;
 import com.example.kursova.model.Tour;
+import com.example.kursova.model.TourFilter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,6 +27,11 @@ import java.util.List;
 
 public class TourListController {
 
+    public ComboBox tourTypeFilter;
+    public ComboBox transportTypeFilter;
+    public ComboBox languageFilter;
+    public TextField minPriceFilter;
+    public TextField maxPriceFilter;
     @FXML
     private TableView<Tour> tourTable;
 
@@ -153,6 +164,40 @@ public class TourListController {
         }
     }
 
+    @FXML
+    private void applyFilters() {
+        TourFilter filter = new TourFilter();
+
+        // Заповнюємо фільтр з полів форми
+        if (tourTypeFilter.getValue() != null)
+            filter.setTourType((TourType) tourTypeFilter.getValue());
+
+        if (transportTypeFilter.getValue() != null)
+            filter.setTransportType((TransportType) transportTypeFilter.getValue());
+
+        if (languageFilter.getValue() != null)
+            filter.setLanguage((TourLanguage) languageFilter.getValue());
+
+        try {
+            if (!minPriceFilter.getText().isBlank())
+                filter.setMinPrice(Double.parseDouble(minPriceFilter.getText()));
+            if (!maxPriceFilter.getText().isBlank())
+                filter.setMaxPrice(Double.parseDouble(maxPriceFilter.getText()));
+        } catch (NumberFormatException e) {
+            System.err.println("❗ Невірно введена ціна");
+            return;
+        }
+
+        // Отримуємо всі тури і фільтруємо вручну
+        List<Tour> allTours = tourDAO.getAllTours();
+        List<Tour> filteredTours = allTours.stream()
+                .filter(filter::matches)
+                .toList();
+
+        tourTable.setItems(FXCollections.observableArrayList(filteredTours));
+    }
+
+
 
     @FXML
     private void initialize() {
@@ -180,6 +225,9 @@ public class TourListController {
             return new SimpleStringProperty(guideText);
         });
 
+        tourTypeFilter.getItems().setAll(TourType.values());
+        transportTypeFilter.getItems().setAll(TransportType.values());
+        languageFilter.getItems().setAll(TourLanguage.values());
 
 
 //        tourTable.getItems().addAll(new TourDAO().getAllTours());
