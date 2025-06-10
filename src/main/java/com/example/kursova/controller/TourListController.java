@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TourListController {
 
@@ -63,6 +64,10 @@ public class TourListController {
     private TableColumn<Tour, String> guideColumn;
 
     private final TourDAO tourDAO = new TourDAO();
+
+    @FXML
+    private TextField searchField;
+
 
     @FXML
     private void handleAddTour() {
@@ -242,5 +247,17 @@ public class TourListController {
         });
 
         refreshTourList();
+    }
+
+    @FXML
+    private void handleSearch() {
+        String keyword = searchField.getText().toLowerCase();
+
+        List<Tour> allTours = tourDAO.getAllTours(); // або збережений список, якщо вже є
+        List<Tour> filteredTours = allTours.stream()
+                .filter(tour -> tour.getTitle().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
+
+        tourTable.setItems(FXCollections.observableArrayList(filteredTours));
     }
 }

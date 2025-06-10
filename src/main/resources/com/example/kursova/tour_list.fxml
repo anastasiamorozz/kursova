@@ -33,7 +33,11 @@
 
                 <Button text="🔍 Фільтрувати" onAction="#applyFilters"/>
             </HBox>
+
+            <TextField fx:id="searchField" promptText="🔍 Пошук за назвою туру..." onKeyReleased="#handleSearch"/>
         </VBox>
+
+
     </top>
 
     <center>
