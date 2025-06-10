@@ -55,4 +55,11 @@
             </columns>
         </TableView>
     </center>
+
+    <bottom>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <Button text="📝 Генерація звіту" onAction="#handleGenerateReport"/>
+        </VBox>
+
+    </bottom>
 </BorderPane>

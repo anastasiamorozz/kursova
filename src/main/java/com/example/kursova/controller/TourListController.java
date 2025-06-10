@@ -8,6 +8,7 @@ import com.example.kursova.model.Guide;
 import com.example.kursova.model.Hotel;
 import com.example.kursova.model.Tour;
 import com.example.kursova.model.TourFilter;
+import com.example.kursova.utils.SimpleReportGenerator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -68,6 +69,8 @@ public class TourListController {
     @FXML
     private TextField searchField;
 
+    private List<Tour> tours;
+
 
     @FXML
     private void handleAddTour() {
@@ -112,7 +115,7 @@ public class TourListController {
 
 
     public void refreshTourList() {
-        List<Tour> tours = tourDAO.getAllTours();
+        tours = tourDAO.getAllTours();
         tourTable.setItems(FXCollections.observableArrayList(tours));
     }
 
@@ -200,6 +203,7 @@ public class TourListController {
                 .toList();
 
         tourTable.setItems(FXCollections.observableArrayList(filteredTours));
+        tours = filteredTours;
     }
 
 
@@ -260,4 +264,14 @@ public class TourListController {
 
         tourTable.setItems(FXCollections.observableArrayList(filteredTours));
     }
+
+    @FXML
+    private void handleGenerateReport() {
+        List<Tour> filteredTours = tours;  // отримуємо список відфільтрованих турів
+        SimpleReportGenerator reportGenerator = new SimpleReportGenerator();
+        Stage stage = new Stage();
+        reportGenerator.generatePdfReport(filteredTours, stage);  // primaryStage - це Stage вашого вікна
+    }
+
+
 }
