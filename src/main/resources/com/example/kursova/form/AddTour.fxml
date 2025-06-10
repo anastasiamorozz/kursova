@@ -14,5 +14,6 @@
     <TextField fx:id="priceField" promptText="Ціна"/>
     <ComboBox fx:id="hotelCombo" promptText="Готель"/>
     <ComboBox fx:id="guideCombo" promptText="Гід"/>
-    <Button text="Додати тур" onAction="#addTour"/>
+    <Label fx:id="errorLabel" textFill="red" />
+    <Button text="Зберегти" onAction="#handleSaveTour"/>
 </VBox>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.kursova.controller.GuideListController"
+      alignment="TOP_CENTER" style="-fx-padding: 20px;">
+
+    <Label text="Список гідів" style="-fx-font-size: 18px;" />
+
+    <TableView fx:id="guideTable" prefHeight="400" prefWidth="600">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Ім'я" prefWidth="200" />
+            <TableColumn fx:id="languageColumn" text="Мова" prefWidth="200" />
+            <TableColumn fx:id="phoneColumn" text="Телефон" prefWidth="200" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="➕ Додати" onAction="#handleAddGuide"/>
+        <Button text="✏️ Редагувати" onAction="#handleEditGuide"/>
+        <Button text="🗑 Видалити" onAction="#handleDeleteGuide"/>
+    </HBox>
+
+    <Label fx:id="errorLabel" textFill="red" />
+</VBox>

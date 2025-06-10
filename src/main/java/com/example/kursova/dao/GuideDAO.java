@@ -68,4 +68,35 @@ public class GuideDAO {
         }
         return null;
     }
+
+    public void deleteGuide(int id) {
+        String sql = "DELETE FROM guides WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("❌ Не вдалося видалити гіда: " + e.getMessage());
+        }
+    }
+
+    public void updateGuide(Guide guide) {
+        String sql = "UPDATE guides SET name = ?, language = ?, phone = ? WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, guide.getName());
+            stmt.setString(2, guide.getLanguage());
+            stmt.setString(3, guide.getPhone());
+            stmt.setInt(4, guide.getId());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка при оновленні гіда: " + e.getMessage());
+        }
+    }
 }

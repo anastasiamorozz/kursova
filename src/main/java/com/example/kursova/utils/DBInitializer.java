@@ -17,8 +17,14 @@ public class DBInitializer {
 
         String createHotelsTable = """
             CREATE TABLE IF NOT EXISTS hotels (
-                name TEXT PRIMARY KEY,
-                stars INTEGER NOT NULL
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                stars INTEGER NOT NULL CHECK(stars >= 1 AND stars <= 5),
+                country TEXT NOT NULL,
+                city TEXT NOT NULL,
+                address TEXT,
+                phone TEXT,
+                email TEXT
             );
         """;
 

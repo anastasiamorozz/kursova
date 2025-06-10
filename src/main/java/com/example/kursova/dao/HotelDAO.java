@@ -10,12 +10,17 @@ import java.util.List;
 public class HotelDAO {
 
     public void addHotel(Hotel hotel) {
-        String sql = "INSERT OR IGNORE INTO hotels (name, stars) VALUES (?, ?)";
+        String sql = "INSERT OR IGNORE INTO hotels (name, stars, country, city, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, hotel.getName());
             stmt.setInt(2, hotel.getStars());
+            stmt.setString(3, hotel.getCountry());
+            stmt.setString(4, hotel.getCity());
+            stmt.setString(5, hotel.getAddress());
+            stmt.setString(6, hotel.getPhone());
+            stmt.setString(7, hotel.getEmail());
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("❌ Помилка додавання готелю: " + e.getMessage());
@@ -33,7 +38,12 @@ public class HotelDAO {
             while (rs.next()) {
                 hotels.add(new Hotel(
                         rs.getString("name"),
-                        rs.getInt("stars")
+                        rs.getInt("stars"),
+                        rs.getString("country"),
+                        rs.getString("city"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getString("email")
                 ));
             }
 
@@ -53,7 +63,12 @@ public class HotelDAO {
             if (rs.next()) {
                 return new Hotel(
                         rs.getString("name"),
-                        rs.getInt("stars")
+                        rs.getInt("stars"),
+                        rs.getString("country"),
+                        rs.getString("city"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getString("email")
                 );
             }
         } catch (SQLException e) {

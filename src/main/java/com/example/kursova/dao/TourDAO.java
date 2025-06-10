@@ -13,8 +13,8 @@ public class TourDAO {
 
     public void addTour(Tour tour) {
         // Обов'язково зберегти готель і гіда перед додаванням туру
-        hotelDAO.addHotel(tour.getHotel());
-        guideDAO.addGuide(tour.getGuide());
+//        hotelDAO.addHotel(tour.getHotel());
+//        guideDAO.addGuide(tour.getGuide());
 
         String sql = """
             INSERT INTO tours (
@@ -78,4 +78,33 @@ public class TourDAO {
 
         return tours;
     }
+
+    public void updateTour(Tour tour) {
+        String sql = """
+        UPDATE tours SET title = ?, tour_type = ?, transport = ?, meal_type = ?, days = ?, price = ?, hotel_name = ?, language = ?, description = ?, guide_id = ?
+        WHERE id = ?;
+    """;
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, tour.getTitle());
+            stmt.setString(2, tour.getTourType().toString());
+            stmt.setString(3, tour.getTransport().toString());
+            stmt.setString(4, tour.getMealType().toString());
+            stmt.setInt(5, tour.getDays());
+            stmt.setDouble(6, tour.getPrice());
+            stmt.setString(7, tour.getHotel().getName());
+            stmt.setString(8, tour.getLanguage().toString());
+            stmt.setString(9, tour.getDescription());
+            stmt.setInt(10, tour.getGuide().getId());
+            stmt.setInt(11, tour.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Не вдалося оновити тур: " + e.getMessage());
+        }
+    }
+
 }

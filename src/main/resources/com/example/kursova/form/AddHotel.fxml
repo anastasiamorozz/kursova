@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
-
-
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.kursova.controller.AddHotelController" spacing="10" style="-fx-padding: 20;">
-    <TextField fx:id="nameField" promptText="Назва готелю"/>
-    <TextField fx:id="starsField" promptText="Кількість зірок"/>
+
+    <!-- Назва готелю -->
+    <TextField fx:id="nameField" promptText="Назва готелю" />
+
+    <!-- Кількість зірок -->
+    <TextField fx:id="starsField" promptText="Кількість зірок" />
+
+    <!-- Країна -->
+    <TextField fx:id="countryField" promptText="Країна" />
+
+    <!-- Місто -->
+    <TextField fx:id="cityField" promptText="Місто" />
+
+    <!-- Адреса -->
+    <TextField fx:id="addressField" promptText="Адреса" />
+
+    <!-- Телефон -->
+    <TextField fx:id="phoneField" promptText="Телефон" />
+
+    <!-- Електронна пошта -->
+    <TextField fx:id="emailField" promptText="Електронна пошта" />
+
+    <!-- Помилка -->
     <Label fx:id="errorLabel" textFill="red" />
-    <Button text="Додати готель" onAction="#addHotel"/>
+
+    <!-- Кнопка додавання готелю -->
+    <Button text="Додати готель" onAction="#addHotel" />
 </VBox>
