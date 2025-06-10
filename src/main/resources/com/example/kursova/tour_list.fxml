@@ -13,7 +13,7 @@
         <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
             <Button text="➕ Додати тур" onAction="#handleAddTour"/>
             <Button text="👨‍💼 Додати гіда" onAction="#handleAddGuide"/>
-            <Button text="🏨 Додати готель" onAction="#handleAddHotel"/>
+<!--            <Button text="🏨 Додати готель" onAction="#handleAddHotel"/>-->
             <Button text="📝 Список готелів" onAction="#handleShowHotelList"/>
         </HBox>
     </top>
