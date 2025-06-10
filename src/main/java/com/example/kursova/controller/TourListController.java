@@ -2,6 +2,7 @@ package com.example.kursova.controller;
 
 import com.example.kursova.dao.TourDAO;
 import com.example.kursova.model.Guide;
+import com.example.kursova.model.Hotel;
 import com.example.kursova.model.Tour;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -135,11 +136,34 @@ public class TourListController {
     }
 
     @FXML
+    private void handleShowHotelList() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/kursova/hotel_list.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Список готелів");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // блокує основне вікно
+            stage.showAndWait(); // чекає закриття
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("❌ Помилка відкриття списку готелів: " + e.getMessage());
+        }
+    }
+
+
+    @FXML
     private void initialize() {
         System.out.println("Контролер ініціалізовано успішно!");
 
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        hotelColumn.setCellValueFactory(new PropertyValueFactory<>("hotel"));
+        hotelColumn.setCellValueFactory(cellData -> {
+            Hotel hotel = cellData.getValue().getHotel();
+            String hotelName = (hotel != null) ? hotel.getName() : "—";
+            return new SimpleStringProperty(hotelName);
+        });
         tourTypeColumn.setCellValueFactory(new PropertyValueFactory<>("tourType"));
         transportColumn.setCellValueFactory(new PropertyValueFactory<>("transport"));
         mealTypeColumn.setCellValueFactory(new PropertyValueFactory<>("mealType"));

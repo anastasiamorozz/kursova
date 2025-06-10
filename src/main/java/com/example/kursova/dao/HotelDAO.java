@@ -76,4 +76,30 @@ public class HotelDAO {
         }
         return null;
     }
+
+    public void deleteHotel(String name) {
+        String sql = "DELETE FROM hotels WHERE name = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка видалення готелю: " + e.getMessage());
+        }
+    }
+
+    public void updateHotel(Hotel hotel) {
+        String sql = "UPDATE hotels SET stars = ?, country = ?, city = ? WHERE name = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, hotel.getStars());
+            stmt.setString(2, hotel.getCountry());
+            stmt.setString(3, hotel.getCity());
+            stmt.setString(4, hotel.getName());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("❌ Помилка оновлення готелю: " + e.getMessage());
+        }
+    }
+
 }

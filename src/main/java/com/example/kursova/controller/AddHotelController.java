@@ -21,6 +21,19 @@ public class AddHotelController {
 
     private final HotelDAO hotelDAO = new HotelDAO();
 
+    private Hotel hotelToEdit;
+
+    public void setHotelToEdit(Hotel hotel) {
+        this.hotelToEdit = hotel;
+        nameField.setText(hotel.getName());
+        starsField.setText(String.valueOf(hotel.getStars()));
+        countryField.setText(hotel.getCountry());
+        cityField.setText(hotel.getCity());
+        addressField.setText(hotel.getAddress());
+        phoneField.setText(hotel.getPhone());
+        emailField.setText(hotel.getEmail());
+    }
+
     @FXML
     private void addHotel() {
         String name = nameField.getText();
@@ -33,28 +46,41 @@ public class AddHotelController {
 
         Stage stage = (Stage) errorLabel.getScene().getWindow();
 
-        // Перевірка, чи заповнені всі поля
-        if (!name.isEmpty() && !starsStr.isEmpty() && !country.isEmpty() && !city.isEmpty() && !address.isEmpty() && !phone.isEmpty() && !email.isEmpty()) {
+        if (!name.isEmpty() && !starsStr.isEmpty() && !country.isEmpty() &&
+                !city.isEmpty() && !address.isEmpty() && !phone.isEmpty() && !email.isEmpty()) {
             try {
                 int stars = Integer.parseInt(starsStr);
                 if (stars < 1 || stars > 5) {
-                    System.out.println("Кількість зірок повинна бути від 1 до 5.");
+                    errorLabel.setText("Кількість зірок повинна бути від 1 до 5.");
                     return;
                 }
 
-                // Створення об'єкта Hotel
-                Hotel hotel = new Hotel(name, stars, country, city, address, phone, email);
+                if (hotelToEdit != null) {
+                    // Редагування
+                    hotelToEdit.setName(name);
+                    hotelToEdit.setStars(stars);
+                    hotelToEdit.setCountry(country);
+                    hotelToEdit.setCity(city);
+                    hotelToEdit.setAddress(address);
+                    hotelToEdit.setPhone(phone);
+                    hotelToEdit.setEmail(email);
 
-                // Додавання готелю до бази
-                hotelDAO.addHotel(hotel);
+                    hotelDAO.updateHotel(hotelToEdit);
+                    System.out.println("Готель оновлено: " + hotelToEdit);
+                } else {
+                    // Додавання нового
+                    Hotel hotel = new Hotel(name, stars, country, city, address, phone, email);
+                    hotelDAO.addHotel(hotel);
+                    System.out.println("Готель додано: " + hotel);
+                }
+
                 stage.close();
-                System.out.println("Готель доданий: " + hotel);
             } catch (NumberFormatException e) {
-                System.out.println("Будь ласка, введіть коректне число для зірок.");
+                errorLabel.setText("Введіть коректне число для зірок.");
             }
         } else {
-            System.out.println("Будь ласка, заповніть всі поля.");
-            errorLabel.setText("Заповніть всі поля");
+            errorLabel.setText("Заповніть всі поля.");
         }
     }
+
 }

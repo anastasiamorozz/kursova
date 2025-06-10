@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.kursova.controller.HotelListController"
+      spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+    <Label text="Список готелів" style="-fx-font-size: 18px;"/>
+
+    <TableView fx:id="hotelTable" prefWidth="600" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Назва" prefWidth="300"/>
+            <TableColumn fx:id="starsColumn" text="Зірок" prefWidth="100"/>
+            <TableColumn fx:id="countryColumn" text="Країна" prefWidth="100"/>
+            <TableColumn fx:id="cityColumn" text="Місто" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="➕ Додати" onAction="#handleAddHotel"/>
+        <Button text="✏️ Редагувати" onAction="#handleEditHotel"/>
+        <Button text="🗑 Видалити" onAction="#handleDeleteHotel"/>
+    </HBox>
+
+    <Label fx:id="errorLabel" textFill="red" />
+</VBox>
