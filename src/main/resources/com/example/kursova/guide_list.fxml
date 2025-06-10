@@ -9,6 +9,8 @@
 
     <Label text="Список гідів" style="-fx-font-size: 18px;" />
 
+    <TextField fx:id="searchField" promptText="🔍 Пошук за іменем гіда..." onKeyReleased="#handleSearch"/>
+
     <TableView fx:id="guideTable" prefHeight="400" prefWidth="600">
         <columns>
             <TableColumn fx:id="nameColumn" text="Ім'я" prefWidth="200" />

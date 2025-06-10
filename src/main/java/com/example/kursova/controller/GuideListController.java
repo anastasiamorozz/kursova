@@ -14,9 +14,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuideListController {
 
+    public TextField searchField;
     @FXML private TableView<Guide> guideTable;
     @FXML private TableColumn<Guide, String> nameColumn;
     @FXML private TableColumn<Guide, String> languageColumn;
@@ -85,5 +87,17 @@ public class GuideListController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleSearch() {
+        String keyword = searchField.getText().toLowerCase();
+
+        List<Guide> allGuids = guideDAO.getAllGuides(); // або збережений список, якщо вже є
+        List<Guide> filteredGuids = allGuids.stream()
+                .filter(el -> el.getName().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
+
+        guideTable.setItems(FXCollections.observableArrayList(filteredGuids));
     }
 }

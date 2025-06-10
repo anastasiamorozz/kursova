@@ -2,7 +2,9 @@ package com.example.kursova.controller;
 
 import com.example.kursova.dao.GuideDAO;
 import com.example.kursova.model.Guide;
+import com.example.kursova.model.Tour;
 import com.example.kursova.utils.DBUtil;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,6 +13,8 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddGuideController {
 
@@ -23,6 +27,9 @@ public class AddGuideController {
     private Label errorLabel;
 
     private final GuideDAO guideDAO = new GuideDAO();
+
+    @FXML
+    private TextField searchField;
 
     @FXML
     private void addGuide() {
