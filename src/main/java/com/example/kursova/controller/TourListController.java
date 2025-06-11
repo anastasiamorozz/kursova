@@ -8,6 +8,8 @@ import com.example.kursova.model.Guide;
 import com.example.kursova.model.Hotel;
 import com.example.kursova.model.Tour;
 import com.example.kursova.model.TourFilter;
+import com.example.kursova.service.TourService;
+import com.example.kursova.utils.LoggerUtil;
 import com.example.kursova.utils.SimpleReportGenerator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +27,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class TourListController {
@@ -35,7 +39,7 @@ public class TourListController {
     public TextField minPriceFilter;
     public TextField maxPriceFilter;
     @FXML
-    private TableView<Tour> tourTable;
+    TableView<Tour> tourTable;
 
     @FXML
     private TableColumn<Tour, String> titleColumn;
@@ -64,13 +68,18 @@ public class TourListController {
     @FXML
     private TableColumn<Tour, String> guideColumn;
 
-    private final TourDAO tourDAO = new TourDAO();
+    private TourService tourService;
 
     @FXML
     private TextField searchField;
 
     private List<Tour> tours;
 
+    private static final Logger logger = LoggerUtil.getLogger();
+
+    public TourListController() {
+        this.tourService = new TourService();
+    }
 
     @FXML
     private void handleAddTour() {
@@ -83,13 +92,12 @@ public class TourListController {
             stage.initModality(Modality.APPLICATION_MODAL); // блокувати інші вікна
             stage.showAndWait(); // чекати закриття
 
+            logger.info("🔧 Користувач відкрив вікно додавання туру");
             refreshTourList(); // ОНОВИТИ ПІСЛЯ ЗАКРИТТЯ
         } catch (IOException e) {
-            System.err.println("❌ Помилка відкриття вікна додавання туру: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "❌ Помилка відкриття вікна додавання туру", e);
         }
     }
-
 
     @FXML
     public void handleAddGuide() {
@@ -107,18 +115,15 @@ public class TourListController {
         }
     }
 
-
     @FXML
     private void handleAddHotel() {
         openWindow("/com/example/kursova/form/AddHotel.fxml", "Додати готель");
     }
 
-
     public void refreshTourList() {
-        tours = tourDAO.getAllTours();
+        tours = tourService.getAllTours();
         tourTable.setItems(FXCollections.observableArrayList(tours));
     }
-
 
     private void openWindow(String fxmlPath, String title) {
         try {
@@ -129,8 +134,8 @@ public class TourListController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            System.err.println("❌ Помилка відкриття вікна: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "❌ Помилка відкриття вікна: " + fxmlPath, e);
+            ;
         }
     }
 
@@ -167,46 +172,33 @@ public class TourListController {
             stage.showAndWait(); // чекає закриття
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("❌ Помилка відкриття списку готелів: " + e.getMessage());
+            logger.log(Level.SEVERE, "❌ Помилка відкриття списку готелів", e);
         }
     }
 
     @FXML
-    private void applyFilters() {
+    void applyFilters() {
         TourFilter filter = new TourFilter();
-
-        // Заповнюємо фільтр з полів форми
         if (tourTypeFilter.getValue() != null)
             filter.setTourType((TourType) tourTypeFilter.getValue());
-
         if (transportTypeFilter.getValue() != null)
             filter.setTransportType((TransportType) transportTypeFilter.getValue());
-
         if (languageFilter.getValue() != null)
             filter.setLanguage((TourLanguage) languageFilter.getValue());
-
         try {
             if (!minPriceFilter.getText().isBlank())
                 filter.setMinPrice(Double.parseDouble(minPriceFilter.getText()));
             if (!maxPriceFilter.getText().isBlank())
                 filter.setMaxPrice(Double.parseDouble(maxPriceFilter.getText()));
         } catch (NumberFormatException e) {
-            System.err.println("❗ Невірно введена ціна");
+            logger.log(Level.WARNING, "❗ Невірно введена ціна", e);
             return;
         }
-
-        // Отримуємо всі тури і фільтруємо вручну
-        List<Tour> allTours = tourDAO.getAllTours();
-        List<Tour> filteredTours = allTours.stream()
-                .filter(filter::matches)
-                .toList();
-
+        List<Tour> filteredTours = tourService.filterTours(filter);
         tourTable.setItems(FXCollections.observableArrayList(filteredTours));
         tours = filteredTours;
+        logger.info("🔍 Застосовано фільтри для турів");
     }
-
-
 
     @FXML
     private void initialize() {
@@ -238,8 +230,7 @@ public class TourListController {
         transportTypeFilter.getItems().setAll(TransportType.values());
         languageFilter.getItems().setAll(TourLanguage.values());
 
-
-//        tourTable.getItems().addAll(new TourDAO().getAllTours());
+        // tourTable.getItems().addAll(new TourDAO().getAllTours());
 
         tourTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -255,23 +246,18 @@ public class TourListController {
 
     @FXML
     private void handleSearch() {
-        String keyword = searchField.getText().toLowerCase();
-
-        List<Tour> allTours = tourDAO.getAllTours(); // або збережений список, якщо вже є
-        List<Tour> filteredTours = allTours.stream()
-                .filter(tour -> tour.getTitle().toLowerCase().contains(keyword))
-                .collect(Collectors.toList());
-
+        String keyword = searchField.getText();
+        List<Tour> filteredTours = tourService.searchTours(keyword);
         tourTable.setItems(FXCollections.observableArrayList(filteredTours));
     }
 
     @FXML
     private void handleGenerateReport() {
-        List<Tour> filteredTours = tours;  // отримуємо список відфільтрованих турів
+        logger.info("📄 Користувач натиснув кнопку генерації звіту");
+        List<Tour> filteredTours = tours; // отримуємо список відфільтрованих турів
         SimpleReportGenerator reportGenerator = new SimpleReportGenerator();
         Stage stage = new Stage();
-        reportGenerator.generatePdfReport(filteredTours, stage);  // primaryStage - це Stage вашого вікна
+        reportGenerator.generatePdfReport(filteredTours, stage); // primaryStage - це Stage вашого вікна
     }
-
 
 }

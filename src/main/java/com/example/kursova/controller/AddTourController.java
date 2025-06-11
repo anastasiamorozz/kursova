@@ -15,17 +15,24 @@ import javafx.stage.Stage;
 
 public class AddTourController {
 
-    @FXML private TextField titleField;
-    @FXML private ComboBox<TourType> tourTypeCombo;
-    @FXML private ComboBox<TransportType> transportCombo;
-    @FXML private ComboBox<MealType> mealTypeCombo;
-    @FXML private TextField daysField;
-    @FXML private TextField priceField;
-    @FXML private ComboBox<Hotel> hotelCombo;
-    @FXML private ComboBox<Guide> guideCombo;
-
     @FXML
-    private Label errorLabel;
+    TextField titleField;
+    @FXML
+    ComboBox<TourType> tourTypeCombo;
+    @FXML
+    ComboBox<TransportType> transportCombo;
+    @FXML
+    ComboBox<MealType> mealTypeCombo;
+    @FXML
+    TextField daysField;
+    @FXML
+    TextField priceField;
+    @FXML
+    ComboBox<Hotel> hotelCombo;
+    @FXML
+    ComboBox<Guide> guideCombo;
+    @FXML
+    Label errorLabel;
 
     private final TourDAO tourDAO = new TourDAO();
     private final HotelDAO hotelDAO = new HotelDAO();
@@ -33,14 +40,13 @@ public class AddTourController {
 
     private Tour tourToEdit = null;
 
-
     @FXML
     private void initialize() {
-//        tourTypeCombo.getItems().setAll(TourType.values());
-//        transportCombo.getItems().setAll(TransportType.values());
-//        mealTypeCombo.getItems().setAll(MealType.values());
-//        hotelCombo.getItems().setAll(hotelDAO.getAllHotels());
-//        guideCombo.getItems().setAll(guideDAO.getAllGuides());
+        // tourTypeCombo.getItems().setAll(TourType.values());
+        // transportCombo.getItems().setAll(TransportType.values());
+        // mealTypeCombo.getItems().setAll(MealType.values());
+        // hotelCombo.getItems().setAll(hotelDAO.getAllHotels());
+        // guideCombo.getItems().setAll(guideDAO.getAllGuides());
 
         System.out.println("⚙ Ініціалізація AddTourController");
 
@@ -56,8 +62,7 @@ public class AddTourController {
         }
     }
 
-    @FXML
-    private void handleSaveTour() {
+    @FXML void handleSaveTour() {
         String title = titleField.getText();
         TourType tourType = tourTypeCombo.getValue();
         TransportType transport = transportCombo.getValue();
@@ -95,8 +100,8 @@ public class AddTourController {
             return;
         }
 
-// Якщо всі перевірки пройшли, можна виконувати дії для збереження або додавання даних
-
+        // Якщо всі перевірки пройшли, можна виконувати дії для збереження або додавання
+        // даних
 
         try {
             int days = Integer.parseInt(daysStr);
@@ -115,7 +120,8 @@ public class AddTourController {
 
                 tourDAO.updateTour(tourToEdit); // оновити в БД
             } else {
-                Tour newTour = new Tour(0, title, tourType, transport, mealType, days, price, hotel, TourLanguage.UKRAINIAN, "", guide);
+                Tour newTour = new Tour(0, title, tourType, transport, mealType, days, price, hotel,
+                        TourLanguage.UKRAINIAN, "", guide);
                 tourDAO.addTour(newTour); // додати новий тур
             }
 
@@ -139,6 +145,5 @@ public class AddTourController {
         hotelCombo.setValue(tour.getHotel());
         guideCombo.setValue(tour.getGuide());
     }
-
 
 }

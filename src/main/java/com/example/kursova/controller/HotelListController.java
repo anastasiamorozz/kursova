@@ -2,6 +2,7 @@ package com.example.kursova.controller;
 
 import com.example.kursova.dao.HotelDAO;
 import com.example.kursova.model.Hotel;
+import com.example.kursova.service.HotelService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,14 +19,25 @@ import java.util.List;
 
 public class HotelListController {
 
-    @FXML private TableView<Hotel> hotelTable;
-    @FXML private TableColumn<Hotel, String> nameColumn;
-    @FXML private TableColumn<Hotel, Integer> starsColumn;
-    @FXML private TableColumn<Hotel, String> countryColumn;
-    @FXML private TableColumn<Hotel, String> cityColumn;
-    @FXML private Label errorLabel;
+    @FXML
+    TableView<Hotel> hotelTable;
+    @FXML
+    private TableColumn<Hotel, String> nameColumn;
+    @FXML
+    private TableColumn<Hotel, Integer> starsColumn;
+    @FXML
+    private TableColumn<Hotel, String> countryColumn;
+    @FXML
+    private TableColumn<Hotel, String> cityColumn;
+    @FXML
+    Label errorLabel;
 
     private final HotelDAO hotelDAO = new HotelDAO();
+    private HotelService hotelService;
+
+    public HotelListController() {
+        this.hotelService = new HotelService();
+    }
 
     @FXML
     private void initialize() {
@@ -38,12 +50,12 @@ public class HotelListController {
     }
 
     @FXML
-    private void handleAddHotel() {
+    void handleAddHotel() {
         openHotelForm(null);
     }
 
     @FXML
-    private void handleEditHotel() {
+    void handleEditHotel() {
         Hotel selected = hotelTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             openHotelForm(selected);
@@ -53,10 +65,10 @@ public class HotelListController {
     }
 
     @FXML
-    private void handleDeleteHotel() {
+    void handleDeleteHotel() {
         Hotel selected = hotelTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            hotelDAO.deleteHotel(selected.getName());
+            hotelService.deleteHotel(selected.getName());
             refreshHotelList();
         } else {
             errorLabel.setText("Оберіть готель для видалення.");
@@ -69,7 +81,8 @@ public class HotelListController {
             Parent root = loader.load();
 
             AddHotelController controller = loader.getController();
-            if (hotelToEdit != null) controller.setHotelToEdit(hotelToEdit);
+            if (hotelToEdit != null)
+                controller.setHotelToEdit(hotelToEdit);
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -83,8 +96,8 @@ public class HotelListController {
         }
     }
 
-    private void refreshHotelList() {
-        List<Hotel> hotels = hotelDAO.getAllHotels();
+    void refreshHotelList() {
+        List<Hotel> hotels = hotelService.getAllHotels();
         hotelTable.setItems(FXCollections.observableArrayList(hotels));
     }
 }

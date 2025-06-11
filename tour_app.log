@@ -1,0 +1,30 @@
+черв. 10, 2025 7:56:34 ПП com.example.kursova.controller.TourListController applyFilters
+INFO: 🔍 Застосовано фільтри для турів
+черв. 10, 2025 7:57:00 ПП com.example.kursova.controller.TourListController handleGenerateReport
+INFO: 📄 Користувач натиснув кнопку генерації звіту
+черв. 10, 2025 8:36:41 ПП com.example.kursova.controller.TourListController applyFilters
+INFO: 🔍 Застосовано фільтри для турів
+черв. 10, 2025 8:36:43 ПП com.example.kursova.controller.TourListController handleGenerateReport
+INFO: 📄 Користувач натиснув кнопку генерації звіту
+черв. 11, 2025 11:08:16 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:09:57 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:23:45 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:24:14 ДП com.example.kursova.controller.TourListController handleAddTour
+INFO: 🔧 Користувач відкрив вікно додавання туру
+черв. 11, 2025 11:32:16 ДП com.example.kursova.controller.TourListController applyFilters
+INFO: 🔍 Застосовано фільтри для турів
+черв. 11, 2025 11:37:25 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:39:27 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:41:21 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:42:56 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:43:45 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message
+черв. 11, 2025 11:45:23 ДП com.example.kursova.utils.LoggerUtilTest testLogging
+INFO: Test log message

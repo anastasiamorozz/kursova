@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import com.example.kursova.service.GuideService;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,13 +20,23 @@ import java.util.stream.Collectors;
 public class GuideListController {
 
     public TextField searchField;
-    @FXML private TableView<Guide> guideTable;
-    @FXML private TableColumn<Guide, String> nameColumn;
-    @FXML private TableColumn<Guide, String> languageColumn;
-    @FXML private TableColumn<Guide, String> phoneColumn;
-    @FXML private Label errorLabel;
+    @FXML
+    TableView<Guide> guideTable;
+    @FXML
+    private TableColumn<Guide, String> nameColumn;
+    @FXML
+    private TableColumn<Guide, String> languageColumn;
+    @FXML
+    private TableColumn<Guide, String> phoneColumn;
+    @FXML
+    Label errorLabel;
 
     private final GuideDAO guideDAO = new GuideDAO();
+    private GuideService guideService;
+
+    public GuideListController() {
+        this.guideService = new GuideService();
+    }
 
     @FXML
     public void initialize() {
@@ -37,7 +48,7 @@ public class GuideListController {
     }
 
     public void refreshGuideList() {
-        List<Guide> guides = guideDAO.getAllGuides();
+        List<Guide> guides = guideService.getAllGuides();
         guideTable.setItems(FXCollections.observableArrayList(guides));
     }
 
@@ -60,7 +71,7 @@ public class GuideListController {
     public void handleDeleteGuide() {
         Guide selected = guideTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            guideDAO.deleteGuide(selected.getId());
+            guideService.deleteGuide(selected.getId());
             refreshGuideList();
         } else {
             errorLabel.setText("Оберіть гіда для видалення");
@@ -90,14 +101,9 @@ public class GuideListController {
     }
 
     @FXML
-    private void handleSearch() {
-        String keyword = searchField.getText().toLowerCase();
-
-        List<Guide> allGuids = guideDAO.getAllGuides(); // або збережений список, якщо вже є
-        List<Guide> filteredGuids = allGuids.stream()
-                .filter(el -> el.getName().toLowerCase().contains(keyword))
-                .collect(Collectors.toList());
-
-        guideTable.setItems(FXCollections.observableArrayList(filteredGuids));
+    void handleSearch() {
+        String keyword = searchField.getText();
+        List<Guide> filteredGuides = guideService.searchGuides(keyword);
+        guideTable.setItems(FXCollections.observableArrayList(filteredGuides));
     }
 }

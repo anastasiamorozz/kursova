@@ -1,5 +1,7 @@
 package com.example.kursova.utils;
 
+import com.example.kursova.utils.handler.EmailHandler;
+
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -19,6 +21,10 @@ public class LoggerUtil {
             logger.addHandler(consoleHandler);
 
             logger.setLevel(Level.ALL);
+
+            // Додаємо обробник для надсилання e-mail
+            logger.addHandler(new EmailHandler());
+
         } catch (IOException e) {
             System.err.println("Не вдалося ініціалізувати логування: " + e.getMessage());
         }
